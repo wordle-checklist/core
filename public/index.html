@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Wordle Checklist</title>
+</head>
+<body>
+    <h1>Wordle Checklist</h1>
+    <form id="results-form" method="post" enctype='multipart/form-data'>
+        <ul>
+            <li>
+                <label for="name">Name:</label>
+                <select name="name">
+                    <option value="arun">Arun</option>
+                    <option value="bread">Bread</option>
+                    <option value="dan">Dan</option>
+                    <option value="mannu">Mannu</option>
+                    <option value="rhi">Rhi</option>
+                    <option value="sam">Sam</option>
+                    <option value="steve">Steve</option>
+                    <option value="tom">Tom</option>
+                </select>
+            </li>
+            <li>
+                <label for="score">Score:</label>
+                <select name="score">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                </select>
+            </li>
+            <li>
+                <label for="guesses">Guesses (optional):</label>
+                <ul>
+                    <li>
+                        <img id="guesses-preview" class="paste-preview" alt="Guesses Preview">
+                        Paste here:
+                        <input type="text" id="guesses-paste">
+                    </li>
+                    <li>
+                        Or upload:
+                        <input type="file" id="guesses-upload">
+                    </li>
+                </ul>
+                <input type="hidden" name="guesses" id="guesses-input">
+            </li>
+            <li>
+                <label for="stats">Stats (optional):</label>
+                <ul>
+                    <li>
+                        <img id="stats-preview" class="paste-preview" alt="Stats Preview">
+                        Paste here:
+                        <input type="text" id="stats-paste">
+                    </li>
+                    <li>
+                        Or upload:
+                        <input type="file" id="stats-upload">
+                    </li>
+                </ul>
+                <input type="hidden" name="stats" id="stats-input">
+            </li>
+        </ul>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="form-errors">
+
+    </div>
+
+    <script src="form.js"></script>
+</body>
+</html>
