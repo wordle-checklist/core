@@ -1,16 +1,19 @@
+const addImagePreview = (imageFile, preview) => {
+    if (preview.src) {
+        URL.revokeObjectURL(preview.src);
+    }
+
+    const url = URL.createObjectURL(imageFile);
+    preview.src = url;
+    preview.style.display = "block";
+};
+
 const pasteImage = (preview) => {
     return (e) => {
         for (const item of e.clipboardData.items) {
             if (item.type.includes("image")) {
-                const data = item.getAsFile();
-
-                if (preview.src) {
-                    URL.revokeObjectURL(preview.src);
-                }
-
-                const url = URL.createObjectURL(data);
-                preview.src = url;
-                preview.style.display = "block";
+                const imageFile = item.getAsFile();
+                addImagePreview(imageFile, preview);
             }
         }
     };
@@ -23,6 +26,19 @@ guessesPaste.addEventListener("paste", pasteImage(guessesPreview));
 const statsPaste = document.getElementById("stats-paste");
 const statsPreview = document.getElementById("stats-preview");
 statsPaste.addEventListener("paste", pasteImage(statsPreview));
+
+const uploadImage = (preview) => {
+    return (e) => {
+        const [file] = e.target.files;
+        addImagePreview(file, preview);
+    };
+};
+
+const guessesUpload = document.getElementById("guesses-upload");
+guessesUpload.addEventListener("change", uploadImage(guessesPreview));
+
+const statsUpload = document.getElementById("stats-upload");
+statsUpload.addEventListener("change", uploadImage(statsPreview));
 
 const submitForm = async (e) => {
     e.preventDefault();
