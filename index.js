@@ -56,8 +56,8 @@ const addResult = (req, res) => {
     const dirPath = path.join("static", "results", today());
     const { name, score } = req.body;
     const { guesses, stats } = req.files;
-    const guessesFilename = guesses ? guesses[0].key : "";
-    const statsFilename = stats ? stats[0].key : "";
+    const guessesFilename = guesses ? guesses[0].location : "";
+    const statsFilename = stats ? stats[0].location : "";
     const content = [name, score, guessesFilename, statsFilename].join(",");
     fs.mkdir(dirPath, { recursive: true })
         .then(() => fs.writeFile(path.join(dirPath, req.body.name), content))
