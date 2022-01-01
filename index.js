@@ -1,21 +1,29 @@
+require("dotenv").config();
+
 const express = require("express");
 const multer = require("multer");
-const mime = require("mime-types");
+const multerS3 = require("multer-s3");
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs/promises");
+const aws = require("aws-sdk");
+
+const s3 = new aws.S3();
 
 const today = () => {
     return new Date().toISOString().split("T")[0];
 };
 
 const app = express();
-app.use(express.static("public", { extensions: ["html"] }));
+app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
 
-const storage = multer.diskStorage({
-    destination: "img",
-    filename: (req, file, cb) => {
-        const ext = mime.extension(file.mimetype);
-        cb(null, `${today()}_${file.fieldname}_${req.body.name}.${ext}`);
+const storage = multerS3({
+    s3: s3,
+    bucket: "wordle-checklist",
+    key: (req, file, cb) => {
+        cb(null, `${today()}/${file.fieldname}_${req.body.name}`);
+    },
+    contentType: (req, file, cb) => {
+        cb(null, file.mimetype);
     },
 });
 
@@ -43,15 +51,17 @@ const upload = multer({ storage, limits, fileFilter }).fields([
 ]);
 
 const addResult = (req, res) => {
-    const filename = `${today()}_results_${req.body.name}`;
+    console.log(req.body);
+    console.log(req.files);
+    const dirPath = path.join("static", "results", today());
     const { name, score } = req.body;
     const { guesses, stats } = req.files;
-    const guessesFilename = guesses ? guesses[0].filename : "";
-    const statsFilename = stats ? stats[0].filename : "";
-    const csv = [name, score, guessesFilename, statsFilename].join(",");
-    fs.writeFileSync(`results/${filename}`, csv);
-
-    res.redirect("results");
+    const guessesFilename = guesses ? guesses[0].key : "";
+    const statsFilename = stats ? stats[0].key : "";
+    const content = [name, score, guessesFilename, statsFilename].join(",");
+    fs.mkdir(dirPath, { recursive: true })
+        .then(() => fs.writeFile(path.join(dirPath, req.body.name), content))
+        .then(() => res.redirect("results"));
 };
 
 app.post("/submit", upload, addResult);
