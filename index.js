@@ -7,7 +7,7 @@ const { Pool } = require("pg");
 const upload = require("./storage");
 
 const port = process.env.PORT || 5000;
-const names = ["Arun", "Bread", "Dan", "Mannu", "Rhi", "Sam", "Steve", "Tom"];
+const names = ["arun", "bread", "dan", "mannu", "rhi", "sam", "steve", "tom"];
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -39,6 +39,24 @@ app.get("/", (req, res) => {
 });
 app.get("/results", (req, res) => {
     res.render(path.join("pages", "results"));
+});
+app.get("/api/results", (req, res) => {
+    const select = "SELECT * FROM results WHERE DATE=CURRENT_DATE";
+    pool.query(select).then((data) => {
+        let results = names.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
+        for (const row of data.rows) {
+            results[row.name] = row;
+        }
+
+        switch (req.query.type) {
+            case "html":
+                res.render(path.join("partials", "resultsList"), { results });
+                break;
+            case "json":
+            default:
+                res.json(results);
+        }
+    });
 });
 app.post("/submit", upload, addResult);
 

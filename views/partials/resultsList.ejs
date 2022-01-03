@@ -1,0 +1,33 @@
+<%
+    const showResults = !Object.values(results).some(result => result === null);
+    if (!showResults) {
+%>
+    <p>Results not revealed until eeryone is in.</p>     
+<% } %>
+<ul>
+    <% for(const name in results) { %>
+        <li>
+            <h2><%= name[0].toUpperCase() + name.slice(1) %></h2>
+            <% 
+                const result = results[name]
+                if (result) {
+            %>
+                <% if (showResults) { %>
+                    <ul>
+                        <li>Score: <%= result.score === 0 ? "Didn't finish" : result.score %></li>
+                        <% if (result.guesses) { %>
+                            <li>Guesses: <img src="<%= result.guesses %>" alt="<% result.name %> guesses"></li>
+                        <% } %>
+                        <% if (result.stats) { %>
+                            <li>Stats: <img src="<%= result.stats %>" alt="<% result.name %> stats"></li>
+                        <% } %>
+                    </ul>
+                <% } else { %>
+                    <p>Submitted</p>
+                <% } %>
+            <% } else { %>
+                <p>Not submitted</p>
+            <% } %>
+        </li>
+    <% } %>
+</ul>
