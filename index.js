@@ -6,6 +6,7 @@ const multerS3 = require("multer-s3");
 const path = require("path");
 const fs = require("fs/promises");
 const aws = require("aws-sdk");
+const { Pool } = require("pg");
 
 const s3 = new aws.S3();
 
@@ -50,18 +51,24 @@ const upload = multer({ storage, limits, fileFilter }).fields([
     { name: "stats", maxCount: 1 },
 ]);
 
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
+
 const addResult = (req, res) => {
-    console.log(req.body);
-    console.log(req.files);
-    const dirPath = path.join("static", "results", today());
     const { name, score } = req.body;
     const { guesses, stats } = req.files;
-    const guessesFilename = guesses ? guesses[0].location : "";
-    const statsFilename = stats ? stats[0].location : "";
-    const content = [name, score, guessesFilename, statsFilename].join(",");
-    fs.mkdir(dirPath, { recursive: true })
-        .then(() => fs.writeFile(path.join(dirPath, req.body.name), content))
-        .then(() => res.redirect("results"));
+    const guessesUrl = guesses ? guesses[0].location : null;
+    const statsUrl = stats ? stats[0].location : null;
+
+    const insert =
+        "INSERT INTO results(name, score, guesses, stats) VALUES($1, $2, $3, $4) " +
+        "ON CONFLICT ON CONSTRAINT name_date_unique DO UPDATE SET " +
+        "score = EXCLUDED.score, " +
+        "guesses = COALESCE(EXCLUDED.guesses, results.guesses), " +
+        "stats = COALESCE(EXCLUDED.stats, results.stats);";
+    const values = [name, score, guessesUrl, statsUrl];
+    pool.query(insert, values).then(() => res.redirect("results"));
 };
 
 app.post("/submit", upload, addResult);
