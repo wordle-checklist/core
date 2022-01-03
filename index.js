@@ -5,10 +5,9 @@ const path = require("path");
 const { Pool } = require("pg");
 
 const upload = require("./storage");
+const { NAMES } = require("./settings");
 
 const port = process.env.PORT || 5000;
-const names = ["arun", "bread", "dan", "mannu", "rhi", "sam", "steve", "tom"];
-
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
 });
@@ -35,7 +34,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-    res.render(path.join("pages", "index"), { names });
+    res.render(path.join("pages", "index"), { names: NAMES });
 });
 app.get("/results", (req, res) => {
     res.render(path.join("pages", "results"));
@@ -43,7 +42,7 @@ app.get("/results", (req, res) => {
 app.get("/api/results", (req, res) => {
     const select = "SELECT * FROM results WHERE DATE=CURRENT_DATE";
     pool.query(select).then((data) => {
-        let results = names.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
+        let results = NAMES.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
         for (const row of data.rows) {
             results[row.name] = row;
         }
