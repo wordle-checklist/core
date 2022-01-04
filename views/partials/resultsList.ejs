@@ -1,14 +1,8 @@
 <% const showResults = spoiler || !Object.values(results).some(result => result === null); %>
-<div class="headings">
+<header class="headings">
     <h1>Wordle Results<h1>
     <h2><%= new Date().toLocaleDateString() %></h2>
-</div>
-    <% if (!showResults) { %>
-        <section>
-            <p>By default results are not revealed until everyone has submitted.</p>
-            <a href="#" role="button" id="show-spoilers" onclick="getResults(true)">Show anyway</a>
-        </section>
-    <% } %>
+</header>
 <% for(const name in results) { %>
     <% const displayName = name[0].toUpperCase() + name.slice(1); %>
     <% const result = results[name]; %>
@@ -19,15 +13,21 @@
                 <li>Score: <%= result.score === 0 ? "Didn't finish" : result.score %></li>
                 <% if (result.guesses) { %>
                     <li>Guesses: <img src="<%= result.guesses %>" alt="<% result.name %> guesses"></li>
-                <% } %>
-                <% if (result.stats) { %>
-                    <li>Stats: <img src="<%= result.stats %>" alt="<% result.name %> stats"></li>
-                <% } %>
-            </ul>
-        </details>
-    <% } else if (result) { %>
-        <p><%= displayName %> - Submitted</p>
-    <% } else { %>
-        <p><%= displayName %> - Not submitted</p>
-    <% } %>
+                    <% } %>
+                    <% if (result.stats) { %>
+                        <li>Stats: <img src="<%= result.stats %>" alt="<% result.name %> stats"></li>
+                        <% } %>
+                    </ul>
+                </details>
+                <% } else if (result) { %>
+                    <p><%= displayName %> - Submitted</p>
+                    <% } else { %>
+                        <p><%= displayName %> - Not submitted</p>
+                        <% } %>
+                        <% } %>
+<% if (!showResults) { %>
+<footer>
+    <p>By default results are not revealed until everyone has submitted.</p>
+    <a href="#" role="button" id="show-spoilers" onclick="getResults(true)">Show anyway</a>
+</footer>
 <% } %>
