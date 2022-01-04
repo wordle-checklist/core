@@ -2,3 +2,7 @@
     display: none;
     box-shadow: var(--card-box-shadow);
 }
+
+#form-errors {
+    display: none;
+}

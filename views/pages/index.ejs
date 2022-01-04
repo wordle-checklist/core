@@ -8,50 +8,55 @@
 <body>
     <%- include ("../partials/nav", { activePage: "Home" }) %>
     <main class="container">
-        <form id="results-form" method="post" enctype='multipart/form-data'>
-            <label for="name">Name:</label>
-            <select name="name">
-                <% for (const name of names) { %>
-                    <option value="<%= name %>"><%= name[0].toUpperCase() + name.slice(1) %> </option>
-                <% } %> 
-            </select>
-            <label for="score">Score:</label>
-            <select name="score">
-                <option value="0">Didn't finish</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
-            <fieldset>
-                <label for="guesses">Guesses (optional):</label>
-                <figure>
-                    <img id="guesses-preview" class="paste-preview" alt="Guesses Preview">
-                </figure>
-                <div class="grid">
-                    <input type="text" id="guesses-paste" placeholder="Paste here">
-                    <input type="file" accept="image/png, image/jpeg, image/jpg" id="guesses-upload">
-                </div>
-            </fieldset>
-            <fieldset>
-                <label for="stats">Stats (optional):</label>
-                <figure>
-                    <img id="stats-preview" class="paste-preview" alt="Stats Preview">
-                </figure>
-                <div class="grid">
-                    <input type="text" id="stats-paste" placeholder="Paste here">
-                    <input type="file" accept="image/png, image/jpeg, image/jpg" id="stats-upload">
-                </div>
-            </fieldset>
-            <button type="submit">Submit</button>
-        </form>
+        <article>
+            <header>
+                <h1>Submit results</h1>
+            </header>
+            <form id="results-form" method="post" enctype='multipart/form-data'>
+                <label for="name">Name:</label>
+                <select name="name">
+                    <% for (const name of names) { %>
+                        <option value="<%= name %>"><%= name[0].toUpperCase() + name.slice(1) %> </option>
+                        <% } %> 
+                    </select>
+                    <label for="score">Score:</label>
+                    <select name="score">
+                        <option value="0">Didn't finish</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                    <fieldset>
+                        <label for="guesses">Guesses (optional):</label>
+                        <figure>
+                            <img id="guesses-preview" class="paste-preview" alt="Guesses Preview">
+                        </figure>
+                        <div class="grid">
+                            <input type="text" id="guesses-paste" placeholder="Paste here">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg" id="guesses-upload">
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <label for="stats">Stats (optional):</label>
+                        <figure>
+                            <img id="stats-preview" class="paste-preview" alt="Stats Preview">
+                        </figure>
+                        <div class="grid">
+                            <input type="text" id="stats-paste" placeholder="Paste here">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg" id="stats-upload">
+                        </div>
+                    </fieldset>
+                    <button type="submit">Submit</button>
+                    <button class="contrast">Skip today's Wordle</button>
+                </form>
+                <footer id="form-errors">
 
-        <div id="form-errors">
-
-        </div>
-    </main>
+                </footer>
+            </article>
+        </main>
     
     <script src="/js/form.js"></script>
 </body>
