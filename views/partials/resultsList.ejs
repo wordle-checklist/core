@@ -4,10 +4,10 @@
     <h2><%= new Date().toLocaleDateString() %></h2>
 </div>
     <% if (!showResults) { %>
-        <p>
-            By default results are not revealed until everyone has submitted.
-            <a href="#" role="button" id="show-spoilers" onclick="getResults(true)">Load results anyway</a>
-        </p>
+        <section>
+            <p>By default results are not revealed until everyone has submitted.</p>
+            <a href="#" role="button" id="show-spoilers" onclick="getResults(true)">Show anyway</a>
+        </section>
     <% } %>
 <% for(const name in results) { %>
     <% const displayName = name[0].toUpperCase() + name.slice(1); %>
