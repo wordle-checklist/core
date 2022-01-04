@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const { Pool } = require("pg");
+const boolParser = require("express-query-boolean");
 
 const upload = require("./storage");
 const { NAMES, NAVIGABLE_PAGES } = require("./settings");
@@ -30,6 +31,7 @@ const addResult = (req, res) => {
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
+app.use(boolParser());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -40,6 +42,7 @@ app.get("/results", (req, res) => {
     res.render(path.join("pages", "results"), { pages: NAVIGABLE_PAGES });
 });
 app.get("/api/results", (req, res) => {
+    console.log(req);
     const select = "SELECT * FROM results WHERE DATE=CURRENT_DATE";
     pool.query(select).then((data) => {
         let results = NAMES.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
@@ -49,7 +52,10 @@ app.get("/api/results", (req, res) => {
 
         switch (req.query.type) {
             case "html":
-                res.render(path.join("partials", "resultsList"), { results });
+                res.render(path.join("partials", "resultsList"), {
+                    results,
+                    spoiler: req.query.spoiler === true,
+                });
                 break;
             case "json":
             default:

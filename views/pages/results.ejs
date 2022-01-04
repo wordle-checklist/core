@@ -7,7 +7,10 @@
 <body>
     <main class="container">
         <article id="main-article">
-            <h1>Wordle Results - <%= new Date().toLocaleDateString() %></h1>
+            <div class="headings">
+                <h1>Wordle Results<h1>
+                <h2><%= new Date().toLocaleDateString() %></h2>
+            </div>
             <p aria-busy="true">Loading</p>
         </article>
     </main>

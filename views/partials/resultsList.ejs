@@ -1,10 +1,13 @@
-<% const showResults = true || !Object.values(results).some(result => result === null); %>
+<% const showResults = spoiler || !Object.values(results).some(result => result === null); %>
 <div class="headings">
     <h1>Wordle Results<h1>
-    <p><%= new Date().toLocaleDateString() %></p>
+    <h2><%= new Date().toLocaleDateString() %></h2>
 </div>
     <% if (!showResults) { %>
-        <small>Results are not revealed until everyone has submitted.</small>     
+        <p>
+            By default results are not revealed until everyone has submitted.
+            <a href="#" role="button" id="show-spoilers" onclick="getResults(true)">Load results anyway</a>
+        </p>
     <% } %>
 <% for(const name in results) { %>
     <% const displayName = name[0].toUpperCase() + name.slice(1); %>
