@@ -9,8 +9,9 @@
     <%- include ("../partials/nav", { activePage: "Home" }) %>
     <main class="container">
         <article>
-            <header>
-                <h1>Submit results</h1>
+            <header class="headings">
+                <h1>Submit Your Results</h1>
+                <h2><%= new Date().toLocaleDateString() %></h2>
             </header>
             <form id="results-form" method="post" enctype='multipart/form-data'>
                 <label for="name">Name:</label>
@@ -50,7 +51,7 @@
                         </div>
                     </fieldset>
                     <button type="submit">Submit</button>
-                    <button class="contrast">Skip today's Wordle</button>
+                    <button id="skip-button" class="contrast">Skip today's Wordle</button>
                 </form>
                 <footer id="form-errors">
 

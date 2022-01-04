@@ -1,6 +1,6 @@
 <% const showResults = spoiler || !Object.values(results).some(result => result === null); %>
 <header class="headings">
-    <h1>Wordle Results<h1>
+    <h1>Today's Results<h1>
     <h2><%= new Date().toLocaleDateString() %></h2>
 </header>
 <% for(const name in results) { %>
