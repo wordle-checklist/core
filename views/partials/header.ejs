@@ -1,0 +1,22 @@
+<header class="container">
+    <nav>
+        <ul>
+            <li><strong><a href="/">Wordle Checklist</a></strong></li>
+        </ul>
+        <ul>
+            <% for(const page of pages) { %>
+                <li>
+                    <% if (activePage !== page.name) { %>
+                        <li><a href="<%= page.path %>"><%= page.name %></a></li>
+                    <% } else { %>
+                        <li><strong><%= page.name %></strong></li>
+                    <% } %>
+                </li>
+            <% } %>
+        </ul>
+        <ul id="nav-theme">
+            
+        </ul>
+    </nav>
+</header>
+<script src="/js/header.js"></script>

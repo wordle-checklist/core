@@ -5,7 +5,7 @@ const path = require("path");
 const { Pool } = require("pg");
 
 const upload = require("./storage");
-const { NAMES } = require("./settings");
+const { NAMES, NAVIGABLE_PAGES } = require("./settings");
 
 const port = process.env.PORT || 5000;
 const pool = new Pool({
@@ -34,10 +34,10 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-    res.render(path.join("pages", "index"), { names: NAMES });
+    res.render(path.join("pages", "index"), { names: NAMES, pages: NAVIGABLE_PAGES });
 });
 app.get("/results", (req, res) => {
-    res.render(path.join("pages", "results"));
+    res.render(path.join("pages", "results"), { pages: NAVIGABLE_PAGES });
 });
 app.get("/api/results", (req, res) => {
     const select = "SELECT * FROM results WHERE DATE=CURRENT_DATE";

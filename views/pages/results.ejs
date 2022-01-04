@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include ("../partials/head") %> 
     <title>Wordle Results</title>
 </head>
 <body>
-    <h1>Wordle Results - <%= new Date().toLocaleDateString() %></h1>
-    <main>
-        <p>Loading results</p>
+    <main class="container">
+        <article id="main-article">
+            <h1>Wordle Results - <%= new Date().toLocaleDateString() %></h1>
+            <p aria-busy="true">Loading</p>
+        </article>
     </main>
 
     <script src="/js/results.js"></script>

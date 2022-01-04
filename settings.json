@@ -1,3 +1,4 @@
 {
-    "NAMES": ["arun", "bread", "dan", "mannu", "rhi", "sam", "steve", "tom"]
+    "NAMES": ["arun", "bread", "dan", "mannu", "rhi", "sam", "steve", "tom"],
+    "NAVIGABLE_PAGES": [{"name": "Home", "path": "/"}, {"name": "Results", "path": "/results"}] 
 }

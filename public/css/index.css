@@ -1,3 +1,4 @@
 .paste-preview {
     display: none;
+    box-shadow: var(--card-box-shadow);
 }
