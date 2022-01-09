@@ -16,13 +16,13 @@
             </header>
             <form id="results-form" method="post" enctype='multipart/form-data'>
                 <label for="name">Name:</label>
-                <select name="name">
+                <select name="name" required>
                     <% for (const name of names) { %>
                         <option value="<%= name %>"><%= name[0].toUpperCase() + name.slice(1) %> </option>
                         <% } %> 
                 </select>
                 <label for="score">Score:</label>
-                <select name="score">
+                <select name="score" required>
                     <optgroup title="*hacker voice*" label="I'm in">
                         <option value="0" title=" ">Didn't finish</option>
                         <option value="1" title=" ">1</option>

@@ -1,7 +1,27 @@
-const addImagePreview = (imageFile, preview) => {
+const validateImage = (file, input) => {
+    const validFiles = ["image/png", "image/jpg", "image.jpeg"];
+    if (validFiles.includes(file.type)) {
+        input.setCustomValidity("");
+        input.removeAttribute("aria-invalid");
+        return true;
+    } else {
+        input.setCustomValidity("Please select a png or jpeg image file.");
+        input.setAttribute("aria-invalid", true);
+        return false;
+    }
+};
+
+const clearImagePreview = (preview) => {
     if (preview.src) {
         URL.revokeObjectURL(preview.src);
     }
+
+    preview.removeAttribute("src");
+    preview.style.display = null;
+};
+
+const addImagePreview = (imageFile, preview) => {
+    clearImagePreview(preview);
 
     const url = URL.createObjectURL(imageFile);
     preview.src = url;
@@ -11,7 +31,7 @@ const addImagePreview = (imageFile, preview) => {
 const pasteImage = (preview) => {
     return (e) => {
         for (const item of e.clipboardData.items) {
-            if (item.type.includes("image")) {
+            if (validateImage(item, e.target)) {
                 const imageFile = item.getAsFile();
                 addImagePreview(imageFile, preview);
             }
@@ -30,7 +50,10 @@ statsPaste.addEventListener("paste", pasteImage(statsPreview));
 const uploadImage = (preview) => {
     return (e) => {
         const [file] = e.target.files;
-        addImagePreview(file, preview);
+        clearImagePreview(preview);
+        if (file && validateImage(file, e.target)) {
+            addImagePreview(file, preview);
+        }
     };
 };
 
@@ -49,6 +72,7 @@ const submitForm = async (e) => {
     const data = new FormData(e.target);
 
     if (e.target.id === "results-form") {
+        e.target.reportValidity();
         if (guessesPreview.src) {
             const guessesBlob = await fetch(guessesPreview.src).then((res) => res.blob());
             data.append("guesses", guessesBlob, "guesses.png");
