@@ -1,6 +1,35 @@
+.paste-preview-container {
+    display: block;
+    position: relative;
+    width: fit-content;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.paste-preview-container:hover::after,
+.paste-preview-container:active::after,
+.paste-preview-container:focus::after {
+    content: "";
+    position: absolute;
+    background-color: var(--del-color);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: var(--icon-close);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    mix-blend-mode: hard-light;
+    opacity: 0.7;
+}
+
 .paste-preview {
     display: none;
     box-shadow: var(--card-box-shadow);
+    max-height: 50vh;
 }
 
 #form-errors {
