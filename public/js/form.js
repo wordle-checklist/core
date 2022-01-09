@@ -47,20 +47,25 @@ const submitForm = async (e) => {
     formErrors.innerHTML = null;
 
     const data = new FormData(e.target);
-    if (guessesPreview.src) {
-        const guessesBlob = await fetch(guessesPreview.src).then((res) => res.blob());
-        data.append("guesses", guessesBlob, "guesses.png");
-    }
 
-    if (statsPreview.src) {
-        const statsBlob = await fetch(statsPreview.src).then((res) => res.blob());
-        data.append("stats", statsBlob, "stats.png");
+    if (e.target.id === "results-form") {
+        if (guessesPreview.src) {
+            const guessesBlob = await fetch(guessesPreview.src).then((res) => res.blob());
+            data.append("guesses", guessesBlob, "guesses.png");
+        }
+
+        if (statsPreview.src) {
+            const statsBlob = await fetch(statsPreview.src).then((res) => res.blob());
+            data.append("stats", statsBlob, "stats.png");
+        }
     }
 
     if (data.get("score") === "skip") {
         data.set("score", 0);
         data.append("skipped", true);
     }
+
+    data.set("date", new Date().toISOString().split("T")[0]);
 
     fetch("/submit", {
         method: "post",
@@ -79,6 +84,7 @@ const submitForm = async (e) => {
 };
 
 document.getElementById("results-form").addEventListener("submit", submitForm);
+document.getElementById("skip-form").addEventListener("submit", submitForm);
 
 const toggleSkipModal = (e) => {
     const name = document.forms["results-form"].elements.name.selectedOptions[0];

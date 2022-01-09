@@ -33,6 +33,7 @@ const addResult = (req, res) => {
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 app.use(boolParser());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -43,8 +44,8 @@ app.get("/", (req, res) => {
 app.get("/results", (req, res) => {
     res.render(path.join("pages", "results"), { pages: NAVIGABLE_PAGES });
 });
-app.get("/api/results", (req, res) => {
-    const select = "SELECT * FROM results WHERE DATE=CURRENT_DATE";
+app.get("/api/results/:date", (req, res) => {
+    const select = `SELECT * FROM results WHERE DATE=${`'${req.params.date}'` || "CURRENT_DATE"}`;
     pool.query(select).then((data) => {
         let results = NAMES.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
         for (const row of data.rows) {
@@ -65,7 +66,6 @@ app.get("/api/results", (req, res) => {
     });
 });
 app.get("/submit", (req, res) => {
-    console.log(req.body);
     res.redirect("results");
 });
 app.post("/submit", upload, addResult);
