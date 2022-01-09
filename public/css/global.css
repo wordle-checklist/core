@@ -1,3 +1,8 @@
+:root {
+    --icon-help: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' stroke-linejoin='round' stroke-linecap='round'><g fill='none' stroke='rgba(115, 130, 140, 0.999)' stroke-width='2'><circle cx='12' cy='12' r='9'/><path d='m 12,12 v 3'/><path d='M 8,9 C 8,8.1715729 8.4477153,7.4215729 9.1715729,6.8786797 9.8954305,6.3357864 10.895431,6 12,6 c 2.209139,0 4,1.3431458 4,3 0,1.656854 -1.790861,3 -4,3'/></g><circle fill='rgba(115, 130, 140, 0.999)' stroke='none' stroke-width='4' cx='12' cy='18' r='1'/></svg>");
+    --help-size: 2rem;
+}
+
 main > article {
     margin-top: 0;
 }
@@ -14,4 +19,33 @@ dialog footer button {
 
 form.hidden-form {
     margin: 0;
+}
+
+.help {
+    display: block;
+    width: var(--help-size);
+    height: var(--help-size);
+    margin-top: calc(var(--block-spacing-vertical) * -0.5);
+    margin-bottom: var(--typography-spacing-vertical);
+    margin-left: auto;
+    background-image: var(--icon-help);
+    background-position: center;
+    background-size: auto var(--help-size);
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    transition: opacity var(--transition);
+}
+
+.help:hover,
+.help:active,
+.help:focus {
+    opacity: 1;
+}
+
+header .help {
+    margin: 0;
+    margin-left: var(--spacing);
+    float: right;
+    position: relative;
+    top: calc(var(--help-size) * 0.5);
 }

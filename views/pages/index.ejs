@@ -10,6 +10,7 @@
     <main class="container">
         <article>
             <header class="headings">
+                <a class="help" aria-label="Help" data-target="help-modal" onclick="toggleModal(event)"></a>
                 <h1>Submit Your Results</h1>
                 <h2><%= new Date().toLocaleDateString() %></h2>
             </header>
@@ -66,7 +67,7 @@
 
     <dialog id="skip-modal">
         <article>
-            <a class="close" aria-lable="Close" data-target="skip-modal" onclick="toggleModal(event)"></a>
+            <a class="close" aria-label="Close" data-target="skip-modal" onclick="toggleModal(event)"></a>
             <h2>Skipping today's Wordle as <strong id="selected-name" class="primary-text-hl">Name</strong></h3>
             <p>
                 If this name is incorrect, go back to the form and change your name. You
@@ -81,6 +82,37 @@
                     <button type="button" class="secondary" data-target="skip-modal" onclick="toggleModal(event)">Cancel</a>
                     <button type="submit" role="button" class="primary">Submit</a>
                 </form>
+            </footer>
+        </article>
+    </dialog>
+
+    <dialog id="help-modal">
+        <article>
+            <a class="close" aria-label="Close" data-target="help-modal" onclick="toggleModal(event)"></a>
+            <h2>Wordle Checklist</h2>
+            <p>Let others know you've done today's Wordle and submit your score.</p>
+            <ul>
+                <li>
+                    <strong class="primary-text-hl">Name: </strong>Your name. The site
+                    will remember the last value you put in here to make tomorrow's
+                    submission easier.
+                </li>
+                <li>
+                    <strong class="primary-text-hl">Score: </strong>How many guesses it
+                    took to get the right answer. Select "Didn't finish" if you couldn't
+                    get it in six tries. Select "Skip" to say you aren't taking part
+                    this time and people can post spoilers.
+                </li>
+                <li>
+                    <strong class="primary-text-hl">Guesses</strong> and
+                    <strong class="primary-text-hl">Stats: </strong> These are optional
+                    fields. You can put a screenshot of today's guesses and your overall
+                    statistics here, if you want. If you do it will appear on the
+                    results page for today.
+                </li>
+            </ul>
+            <footer>
+                <button data-target="help-modal" onclick="toggleModal(event)">OK</button>
             </footer>
         </article>
     </dialog>
