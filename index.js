@@ -14,18 +14,20 @@ const pool = new Pool({
 });
 
 const addResult = (req, res) => {
-    const { name, score } = req.body;
+    console.log(req.body);
+    const { name, score, skipped = false } = req.body;
     const { guesses, stats } = req.files;
     const guessesUrl = guesses ? guesses[0].location : null;
     const statsUrl = stats ? stats[0].location : null;
 
     const insert =
-        "INSERT INTO results(name, score, guesses, stats) VALUES($1, $2, $3, $4) " +
+        "INSERT INTO results(name, score, guesses, stats, skipped) VALUES($1, $2, $3, $4, $5) " +
         "ON CONFLICT ON CONSTRAINT name_date_unique DO UPDATE SET " +
         "score = EXCLUDED.score, " +
         "guesses = COALESCE(EXCLUDED.guesses, results.guesses), " +
-        "stats = COALESCE(EXCLUDED.stats, results.stats);";
-    const values = [name, score, guessesUrl, statsUrl];
+        "stats = COALESCE(EXCLUDED.stats, results.stats)," +
+        "skipped = COALESCE(EXCLUDED.skipped, results.skipped);";
+    const values = [name, score, guessesUrl, statsUrl, skipped];
     pool.query(insert, values).then(() => res.redirect("results"));
 };
 
@@ -42,7 +44,6 @@ app.get("/results", (req, res) => {
     res.render(path.join("pages", "results"), { pages: NAVIGABLE_PAGES });
 });
 app.get("/api/results", (req, res) => {
-    console.log(req);
     const select = "SELECT * FROM results WHERE DATE=CURRENT_DATE";
     pool.query(select).then((data) => {
         let results = NAMES.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
@@ -62,6 +63,10 @@ app.get("/api/results", (req, res) => {
                 res.json(results);
         }
     });
+});
+app.get("/submit", (req, res) => {
+    console.log(req.body);
+    res.redirect("results");
 });
 app.post("/submit", upload, addResult);
 

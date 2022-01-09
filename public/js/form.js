@@ -57,6 +57,11 @@ const submitForm = async (e) => {
         data.append("stats", statsBlob, "stats.png");
     }
 
+    if (data.get("score") === "skip") {
+        data.set("score", 0);
+        data.append("skipped", true);
+    }
+
     fetch("/submit", {
         method: "post",
         body: data,
@@ -74,3 +79,12 @@ const submitForm = async (e) => {
 };
 
 document.getElementById("results-form").addEventListener("submit", submitForm);
+
+const toggleSkipModal = (e) => {
+    const name = document.forms["results-form"].elements.name.selectedOptions[0];
+    document.getElementById("selected-name").innerText = name.text;
+    document.getElementById("hidden-name-input").value = name.value;
+    toggleModal(e);
+};
+
+document.getElementById("skip-button").addEventListener("click", toggleSkipModal);

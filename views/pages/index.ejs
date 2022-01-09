@@ -19,46 +19,73 @@
                     <% for (const name of names) { %>
                         <option value="<%= name %>"><%= name[0].toUpperCase() + name.slice(1) %> </option>
                         <% } %> 
-                    </select>
-                    <label for="score">Score:</label>
-                    <select name="score">
-                        <option value="0">Didn't finish</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
-                    <fieldset>
-                        <label for="guesses">Guesses (optional):</label>
-                        <figure>
-                            <img id="guesses-preview" class="paste-preview" alt="Guesses Preview">
-                        </figure>
-                        <div class="grid">
-                            <input type="text" id="guesses-paste" placeholder="Paste here">
-                            <input type="file" accept="image/png, image/jpeg, image/jpg" id="guesses-upload">
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <label for="stats">Stats (optional):</label>
-                        <figure>
-                            <img id="stats-preview" class="paste-preview" alt="Stats Preview">
-                        </figure>
-                        <div class="grid">
-                            <input type="text" id="stats-paste" placeholder="Paste here">
-                            <input type="file" accept="image/png, image/jpeg, image/jpg" id="stats-upload">
-                        </div>
-                    </fieldset>
-                    <button type="submit">Submit</button>
-                    <button id="skip-button" class="contrast">Skip today's Wordle</button>
-                </form>
-                <footer id="form-errors">
+                </select>
+                <label for="score">Score:</label>
+                <select name="score">
+                    <optgroup title="*hacker voice*" label="I'm in">
+                        <option value="0" title=" ">Didn't finish</option>
+                        <option value="1" title=" ">1</option>
+                        <option value="2" title=" ">2</option>
+                        <option value="3" title=" ">3</option>
+                        <option value="4" title=" ">4</option>
+                        <option value="5" title=" ">5</option>
+                        <option value="6" title=" ">6</option>
+                    </optgroup>
+                    <optgroup label="I'm out">
+                        <option value="skip">Skip</option>
+                    </optgroup>
+                </select>
+                <fieldset>
+                    <label for="guesses">Guesses (optional):</label>
+                    <figure>
+                        <img id="guesses-preview" class="paste-preview" alt="Guesses Preview">
+                    </figure>
+                    <div class="grid">
+                        <input type="text" id="guesses-paste" placeholder="Paste here">
+                        <input type="file" accept="image/png, image/jpeg, image/jpg" id="guesses-upload">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <label for="stats">Stats (optional):</label>
+                    <figure>
+                        <img id="stats-preview" class="paste-preview" alt="Stats Preview">
+                    </figure>
+                    <div class="grid">
+                        <input type="text" id="stats-paste" placeholder="Paste here">
+                        <input type="file" accept="image/png, image/jpeg, image/jpg" id="stats-upload">
+                    </div>
+                </fieldset>
+                <button type="submit">Submit</button>
+                <button type="button" id="skip-button" class="contrast" data-target="skip-modal">Skip today's Wordle</button>
+            </form>
+            <footer id="form-errors">
 
-                </footer>
-            </article>
-        </main>
+            </footer>
+        </article>
+    </main>
+
+    <dialog id="skip-modal">
+        <article>
+            <a class="close" aria-lable="Close" data-target="skip-modal" onclick="toggleModal(event)"></a>
+            <h2>Skipping today's Wordle as <strong id="selected-name" class="primary-text-hl">Name</strong></h3>
+            <p>
+                If this name is incorrect, go back to the form and change your name. You
+                can also choose to skip by selecting "skip" from the score dropdown and
+                submitting normally.
+            </p>
+            <footer>
+                <form id="skip-form" class="hidden-form" method="post" action="/submit" enctype='multipart/form-data'>
+                    <input type="hidden" name="name" id="hidden-name-input" value="name">
+                    <input type="hidden" name="score" value="0">
+                    <input type="hidden" name="skipped" value="true">
+                    <button type="button" class="secondary" data-target="skip-modal" onclick="toggleModal(event)">Cancel</a>
+                    <button type="submit" role="button" class="primary">Submit</a>
+                </form>
+            </footer>
+        </article>
+    </dialog>
     
+    <script src="/js/modal.js"></script>
     <script src="/js/form.js"></script>
 </body>
 </html>

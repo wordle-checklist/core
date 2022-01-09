@@ -1,3 +1,17 @@
 main > article {
     margin-top: 0;
 }
+
+.primary-text-hl {
+    color: var(--primary);
+}
+
+dialog footer button {
+    display: inline-block;
+    width: initial;
+    margin-bottom: 0;
+}
+
+form.hidden-form {
+    margin: 0;
+}
