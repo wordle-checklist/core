@@ -70,10 +70,11 @@ statsPaste.addEventListener("paste", pasteImage(statsPreview));
 statsUpload.addEventListener("change", uploadImage(statsPreview));
 statsPreview.parentElement.addEventListener("click", removeImage(statsPreview, statsUpload));
 
-const setFormControl = (form, disable = false) => {
+const setFormControl = (form, disable = false, submitMessage = "Submit") => {
     for (const button of form.getElementsByTagName("button")) {
         if (button.type === "submit") {
             button.ariaBusy = disable;
+            button.textContent = submitMessage;
         }
         button.disabled = disable;
     }
@@ -112,9 +113,16 @@ const submitForm = async (e) => {
     clearFormErrors();
 
     const data = new FormData(e.target);
-    setFormControl(e.target, true);
-
+    const score = data.get("score");
     if (e.target.id === "results-form") {
+        const submitMessage =
+            score === "0"
+                ? "Don't worry kiddo, you'll get 'em next time."
+                : score === "skip"
+                ? "Skipping"
+                : "Well done, I'm proud of you.";
+        setFormControl(e.target, true, submitMessage);
+
         if (guessesPreview.src) {
             const guessesBlob = await fetch(guessesPreview.src).then((res) => res.blob());
             data.append("guesses", guessesBlob, "guesses.png");
@@ -124,9 +132,11 @@ const submitForm = async (e) => {
             const statsBlob = await fetch(statsPreview.src).then((res) => res.blob());
             data.append("stats", statsBlob, "stats.png");
         }
+    } else {
+        setFormControl(e.target, true);
     }
 
-    if (data.get("score") === "skip") {
+    if (score === "skip") {
         data.set("score", 0);
         data.append("skipped", true);
     }
