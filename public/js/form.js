@@ -70,16 +70,51 @@ statsPaste.addEventListener("paste", pasteImage(statsPreview));
 statsUpload.addEventListener("change", uploadImage(statsPreview));
 statsPreview.parentElement.addEventListener("click", removeImage(statsPreview, statsUpload));
 
-const submitForm = async (e) => {
-    e.preventDefault();
+const setFormControl = (form, disable = false) => {
+    for (const button of form.getElementsByTagName("button")) {
+        if (button.type === "submit") {
+            button.ariaBusy = disable;
+        }
+        button.disabled = disable;
+    }
 
+    for (const field of [
+        ...form.getElementsByTagName("input"),
+        ...form.getElementsByTagName("select"),
+    ]) {
+        field.disabled = disable;
+    }
+};
+
+const clearFormErrors = () => {
     const formErrors = document.getElementById("form-errors");
     formErrors.innerHTML = null;
+    formErrors.style.display = null;
+};
+
+const showFormErrors = (message, html = true) => {
+    const formErrors = document.getElementById("form-errors");
+    if (html) {
+        formErrors.innerHTML = message;
+    } else {
+        const pre = document.createElement("pre");
+        pre.textContent = message;
+        formErrors.appendChild(pre);
+    }
+
+    formErrors.style.display = "block";
+};
+
+const submitForm = async (e) => {
+    e.preventDefault();
+    e.target.reportValidity();
+
+    clearFormErrors();
 
     const data = new FormData(e.target);
+    setFormControl(e.target, true);
 
     if (e.target.id === "results-form") {
-        e.target.reportValidity();
         if (guessesPreview.src) {
             const guessesBlob = await fetch(guessesPreview.src).then((res) => res.blob());
             data.append("guesses", guessesBlob, "guesses.png");
@@ -102,6 +137,10 @@ const submitForm = async (e) => {
         method: "post",
         body: data,
     })
+        .catch((err) => {
+            showFormErrors(err.stack, false);
+            throw err;
+        })
         .then((res) => {
             if (res.ok) {
                 window.location = res.url;
@@ -110,7 +149,10 @@ const submitForm = async (e) => {
             }
         })
         .then((text) => {
-            formErrors.innerHTML = text;
+            if (text) showFormErrors(text);
+        })
+        .finally(() => {
+            setFormControl(e.target, false);
         });
 };
 
