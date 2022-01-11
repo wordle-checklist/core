@@ -1,3 +1,18 @@
+const getName = () => {
+    return localStorage.getItem("name");
+};
+
+const setName = (name) => {
+    localStorage.setItem("name", name);
+};
+
+const nameInputs = document.getElementsByName("name");
+const nameVal = getName();
+for (const nameInput of nameInputs) {
+    if (nameVal) nameInput.value = nameVal;
+    nameInput.addEventListener("change", (e) => setName(e.target.value));
+}
+
 const validateImage = (file, input) => {
     const validFiles = ["image/png", "image/jpg", "image/jpeg"];
     if (validFiles.includes(file.type)) {
