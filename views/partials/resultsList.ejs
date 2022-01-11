@@ -4,26 +4,43 @@
     <h2><%= new Date().toLocaleDateString() %></h2>
 </header>
 <% for(const name in results) { %>
-    <% const displayName = name[0].toUpperCase() + name.slice(1); %>
-    <% const result = results[name]; %>
-    <% if (result && showResults) { %>
-        <details>
-            <summary><%= displayName %> - Submitted</summary>
-            <ul>
-                <li>Score: <%= result.score === 0 ? "Didn't finish" : result.score %></li>
-                <% if (result.guesses) { %>
-                    <li>Guesses: <img src="<%= result.guesses %>" alt="<% result.name %> guesses"></li>
-                <% } %>
-                <% if (result.stats) { %>
-                    <li>Stats: <img src="<%= result.stats %>" alt="<% result.name %> stats"></li>
-                <% } %>
-            </ul>
-        </details>
-    <% } else if (result) { %>
-        <p><%= displayName %> - Submitted</p>
-    <% } else { %>
-        <p><%= displayName %> - Not submitted</p>
-    <% } %>
+    <section>
+        <% const displayName = name[0].toUpperCase() + name.slice(1); %>
+        <% const result = results[name]; %>
+        <% if (result && showResults) { %>
+            <details>
+                <summary><%= displayName %> - Submitted</summary>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Score</th>
+                            <th>Guesses</th>
+                            <th>Stats</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><%= result.score === 0 ? "Didn't finish" : result.score %></td>
+                            <td>
+                                <% if (result.guesses) { %>
+                                    <img src="<%= result.guesses %>" alt="<% result.name %> guesses">
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if (result.stats) { %>
+                                    <img src="<%= result.stats %>" alt="<% result.name %> stats">
+                                <% } %>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </details>
+        <% } else if (result) { %>
+            <p><%= displayName %> - Submitted</p>
+        <% } else { %>
+            <p><%= displayName %> - Not submitted</p>
+        <% } %>
+    </section>
 <% } %>
 <% if (!showResults) { %>
 <footer>
