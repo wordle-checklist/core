@@ -49,3 +49,23 @@ header .help {
     position: relative;
     top: calc(var(--help-size) * 0.5);
 }
+
+details summary ~ * {
+    transform-origin: top;
+    transform: scaleY(0);
+}
+
+details[open] summary ~ * {
+    animation: accordion 0.2s ease-in-out forwards;
+}
+
+@keyframes accordion {
+    0% {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}

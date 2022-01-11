@@ -3,13 +3,14 @@
     <h1>Today's Results<h1>
     <h2><%= new Date().toLocaleDateString() %></h2>
 </header>
+<section class="results-flex">
 <% for(const name in results) { %>
-    <section>
         <% const displayName = name[0].toUpperCase() + name.slice(1); %>
         <% const result = results[name]; %>
-        <% if (result && showResults) { %>
+        <% const status = !result ? "Not submitted" : result.skipped ? "Skipped" : "Submitted" %>
+        <% if (result && !result.skipped && showResults) { %>
             <details>
-                <summary><%= displayName %> - Submitted</summary>
+                <summary><%= displayName %> - <%= status %></summary>
                 <table>
                     <thead>
                         <tr>
@@ -36,12 +37,12 @@
                 </table>
             </details>
         <% } else if (result) { %>
-            <p><%= displayName %> - Submitted</p>
+            <p><%= displayName %> - <%= status %></p>
         <% } else { %>
-            <p><%= displayName %> - Not submitted</p>
+            <p><%= displayName %> - <%= status %></p>
         <% } %>
-    </section>
 <% } %>
+</section>
 <% if (!showResults) { %>
 <footer>
     <p>By default results are not revealed until everyone has submitted.</p>
