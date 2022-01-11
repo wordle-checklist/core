@@ -53,7 +53,7 @@ const removeImage = (preview, input) => {
 const pasteImage = (preview) => {
     return (e) => {
         for (const item of e.clipboardData.items) {
-            if (validateImage(item, e.target)) {
+            if (item.kind === "file" && validateImage(item, e.target)) {
                 const imageFile = item.getAsFile();
                 addImagePreview(imageFile, preview);
             }
@@ -75,6 +75,7 @@ const guessesPaste = document.getElementById("guesses-paste");
 const guessesPreview = document.getElementById("guesses-preview");
 const guessesUpload = document.getElementById("guesses-upload");
 guessesPaste.addEventListener("paste", pasteImage(guessesPreview));
+guessesPaste.addEventListener("blur", (e) => (e.target.value = null));
 guessesUpload.addEventListener("change", uploadImage(guessesPreview));
 guessesPreview.parentElement.addEventListener("click", removeImage(guessesPreview, guessesUpload));
 
@@ -82,6 +83,7 @@ const statsPaste = document.getElementById("stats-paste");
 const statsPreview = document.getElementById("stats-preview");
 const statsUpload = document.getElementById("stats-upload");
 statsPaste.addEventListener("paste", pasteImage(statsPreview));
+statsPaste.addEventListener("blur", (e) => (e.target.value = null));
 statsUpload.addEventListener("change", uploadImage(statsPreview));
 statsPreview.parentElement.addEventListener("click", removeImage(statsPreview, statsUpload));
 
