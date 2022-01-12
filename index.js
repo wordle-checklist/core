@@ -14,7 +14,6 @@ const pool = new Pool({
 });
 
 const addResult = (req, res) => {
-    console.log(req.body);
     const { name, score, skipped = false } = req.body;
     const { guesses, stats } = req.files;
     const guessesUrl = guesses ? guesses[0].location : null;
@@ -28,7 +27,11 @@ const addResult = (req, res) => {
         "stats = COALESCE(EXCLUDED.stats, results.stats)," +
         "skipped = COALESCE(EXCLUDED.skipped, results.skipped);";
     const values = [name, score, guessesUrl, statsUrl, skipped];
-    pool.query(insert, values).then(() => res.redirect("results"));
+    pool.query(insert, values)
+        .then(() => res.redirect("results"))
+        .catch((err) => {
+            console.error(err);
+        });
 };
 
 const app = express();
@@ -46,24 +49,26 @@ app.get("/results", (req, res) => {
 });
 app.get("/api/results/:date", (req, res) => {
     const select = `SELECT * FROM results WHERE DATE=${`'${req.params.date}'` || "CURRENT_DATE"}`;
-    pool.query(select).then((data) => {
-        let results = NAMES.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
-        for (const row of data.rows) {
-            results[row.name] = row;
-        }
+    pool.query(select)
+        .then((data) => {
+            let results = NAMES.reduce((acc, curr) => ({ [curr]: null, ...acc }), {});
+            for (const row of data.rows) {
+                results[row.name] = row;
+            }
 
-        switch (req.query.type) {
-            case "html":
-                res.render(path.join("partials", "resultsList"), {
-                    results,
-                    spoiler: req.query.spoiler === true,
-                });
-                break;
-            case "json":
-            default:
-                res.json(results);
-        }
-    });
+            switch (req.query.type) {
+                case "html":
+                    res.render(path.join("partials", "resultsList"), {
+                        results,
+                        spoiler: req.query.spoiler === true,
+                    });
+                    break;
+                case "json":
+                default:
+                    res.json(results);
+            }
+        })
+        .catch((err) => console.error(err));
 });
 app.get("/submit", (req, res) => {
     res.redirect("results");
