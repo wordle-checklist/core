@@ -1,4 +1,5 @@
 <% const showResults = spoiler || !Object.values(results).some(result => result === null); %>
+<% const statusMap = { "Not submitted": "not-submitted", "Skipped": "skipped", "Submitted": "submitted" } %>
 <header class="headings">
     <h1>Today's Results<h1>
     <h2><%= new Date().toLocaleDateString() %></h2>
@@ -8,8 +9,9 @@
         <% const displayName = name[0].toUpperCase() + name.slice(1); %>
         <% const result = results[name]; %>
         <% const status = !result ? "Not submitted" : result.skipped ? "Skipped" : "Submitted" %>
+        <% const statusClass = statusMap[status] %>
         <% if (result && !result.skipped && showResults) { %>
-            <details>
+            <details class="<%= statusClass %>">
                 <summary><%= displayName %> - <%= status %></summary>
                 <table>
                     <thead>
@@ -36,10 +38,8 @@
                     </tbody>
                 </table>
             </details>
-        <% } else if (result) { %>
-            <p><%= displayName %> - <%= status %></p>
         <% } else { %>
-            <p><%= displayName %> - <%= status %></p>
+            <p class="<%= statusClass %>"><%= displayName %> - <%= status %></p>
         <% } %>
 <% } %>
 </section>

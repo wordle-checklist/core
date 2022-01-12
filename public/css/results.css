@@ -1,3 +1,7 @@
+:root {
+    --icon-size: 1em;
+}
+
 @media (min-width: 992px) {
     .results-flex {
         display: flex;
@@ -20,6 +24,7 @@
 
 .results-flex > details {
     box-shadow: var(--card-box-shadow);
+    border-left: 2px solid var(--form-element-valid-border-color);
 }
 
 .results-flex > details:not([open]) summary {
@@ -34,4 +39,39 @@
 
 .results-flex details[open] summary {
     padding-top: var(--block-spacing-vertical);
+}
+
+.skipped {
+    color: var(--muted-color);
+}
+
+/* .skipped,
+.submitted,
+.not-submitted {
+    position: relative;
+} */
+
+p.skipped::before,
+p.submitted::before,
+p.not-submitted::before {
+    content: "";
+    display: inline-block;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    margin-right: var(--spacing);
+    background-size: var(--icon-size);
+    background-repeat: no-repeat;
+    vertical-align: middle;
+}
+
+.skipped::before {
+    background-image: var(--icon-minus);
+}
+
+.submitted::before {
+    background-image: var(--icon-valid);
+}
+
+.not-submitted::before {
+    background-image: var(--icon-invalid);
 }
